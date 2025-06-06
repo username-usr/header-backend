@@ -11,7 +11,6 @@ BASE_URL = "https://openrouter.ai/api/v1/chat/completions"
 if not API_KEY:
     raise ValueError("OPENROUTER_API_KEY environment variable is not set")
 
-
 HEADERS = {
     "Authorization": f"Bearer {API_KEY}",
     "Content-Type": "application/json",
@@ -19,8 +18,11 @@ HEADERS = {
     "X-Title": "Excel AI App"
 }
 
-
 async def call_ai_cellmap(prompt: str, model: str) -> dict:
+    """
+    Call OpenRouter API to generate a cell map based on the prompt.
+    Returns a JSON object with cell coordinates (e.g., c1r1) and values.
+    """
     system_msg = (
         "You are a spreadsheet assistant. Output only a JSON object where keys are cell coordinates "
         "(like c1r1 for column 1 row 1), and values are cell contents. "
@@ -81,4 +83,4 @@ async def call_ai_cellmap(prompt: str, model: str) -> dict:
             raise Exception(f"Network error contacting OpenRouter: {str(e)}")
         except Exception as e:
             print("❌ Final Error:", str(e))
-            raise Exception(f"Failed to get usable data from OpenRouter: {str(e)}")
+            raise Exception(f"Failed to get usable data from OpenRouter: {str(e)}") 
