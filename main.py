@@ -13,7 +13,9 @@ app.add_middleware(
         "http://localhost:5173",
         "http://127.0.0.1:5173",
         "http://localhost:8000",
-        "http://127.0.0.1:8000"
+        "http://127.0.0.1:8000",
+        "https://header-frontend.vercel.app",  # ADD THIS LINE
+        "https://header-frontend-*.vercel.app",  # This covers preview deployments
     ],
     allow_credentials=True,
     allow_methods=["*"],
