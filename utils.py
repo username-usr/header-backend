@@ -7,6 +7,11 @@ load_dotenv()
 API_KEY = os.getenv("OPENROUTER_API_KEY")
 BASE_URL = "https://openrouter.ai/api/v1/chat/completions"
 
+# Validate API key
+if not API_KEY:
+    raise ValueError("OPENROUTER_API_KEY environment variable is not set")
+
+
 HEADERS = {
     "Authorization": f"Bearer {API_KEY}",
     "Content-Type": "application/json",
@@ -35,7 +40,12 @@ async def call_ai_cellmap(prompt: str, model: str) -> dict:
         try:
             print(f"Sending request to OpenRouter with prompt: {prompt}, model: {model}")
             res = await client.post(BASE_URL, json=payload, headers=HEADERS, timeout=30.0)
-            res.raise_for_status()
+            
+            # Check for 401 Unauthorized explicitly
+            if res.status_code == 401:
+                raise Exception("OpenRouter API authentication failed: Invalid or missing API key")
+            
+            res.raise_for_status()  # Raises for 4xx/5xx errors
 
             # Extract the content
             response_json = res.json()
